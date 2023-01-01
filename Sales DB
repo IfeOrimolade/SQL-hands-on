@@ -1,139 +1,122 @@
-CREATE TABLE `payment_methods` (
-  `payment_method_id` tinyint(4) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`payment_method_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-INSERT INTO `payment_methods` VALUES (1,'Credit Card');
-INSERT INTO `payment_methods` VALUES (2,'Cash');
-INSERT INTO `payment_methods` VALUES (3,'PayPal');
-INSERT INTO `payment_methods` VALUES (4,'Wire Transfer');
 
-CREATE TABLE `clients` (
-  `client_id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `address` varchar(50) NOT NULL,
-  `city` varchar(50) NOT NULL,
-  `state` char(2) NOT NULL,
-  `phone` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-INSERT INTO `clients` VALUES (1,'Vinte','3 Nevada Parkway','Syracuse','NY','315-252-7305');
-INSERT INTO `clients` VALUES (2,'Myworks','34267 Glendale Parkway','Huntington','WV','304-659-1170');
-INSERT INTO `clients` VALUES (3,'Yadel','096 Pawling Parkway','San Francisco','CA','415-144-6037');
-INSERT INTO `clients` VALUES (4,'Kwideo','81674 Westerfield Circle','Waco','TX','254-750-0784');
-INSERT INTO `clients` VALUES (5,'Topiclounge','0863 Farmco Road','Portland','OR','971-888-9129');
+CREATE TABLE employee (
+  emp_id INT PRIMARY KEY,
+  first_name VARCHAR(40),
+  last_name VARCHAR(40),
+  birth_day DATE,
+  sex VARCHAR(1),
+  salary INT,
+  super_id INT,
+  branch_id INT
+);
 
-CREATE TABLE `invoices` (
-  `invoice_id` int(11) NOT NULL,
-  `number` varchar(50) NOT NULL,
-  `client_id` int(11) NOT NULL,
-  `invoice_total` decimal(9,2) NOT NULL,
-  `payment_total` decimal(9,2) NOT NULL DEFAULT '0.00',
-  `invoice_date` date NOT NULL,
-  `due_date` date NOT NULL,
-  `payment_date` date DEFAULT NULL,
-  PRIMARY KEY (`invoice_id`),
-  KEY `FK_client_id` (`client_id`),
-  CONSTRAINT `FK_client_id` FOREIGN KEY (`client_id`) REFERENCES `clients` (`client_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-INSERT INTO `invoices` VALUES (1,'91-953-3396',2,101.79,0.00,'2019-03-09','2019-03-29',NULL);
-INSERT INTO `invoices` VALUES (2,'03-898-6735',5,175.32,8.18,'2019-06-11','2019-07-01','2019-02-12');
-INSERT INTO `invoices` VALUES (3,'20-228-0335',5,147.99,0.00,'2019-07-31','2019-08-20',NULL);
-INSERT INTO `invoices` VALUES (4,'56-934-0748',3,152.21,0.00,'2019-03-08','2019-03-28',NULL);
-INSERT INTO `invoices` VALUES (5,'87-052-3121',5,169.36,0.00,'2019-07-18','2019-08-07',NULL);
-INSERT INTO `invoices` VALUES (6,'75-587-6626',1,157.78,74.55,'2019-01-29','2019-02-18','2019-01-03');
-INSERT INTO `invoices` VALUES (7,'68-093-9863',3,133.87,0.00,'2019-09-04','2019-09-24',NULL);
-INSERT INTO `invoices` VALUES (8,'78-145-1093',1,189.12,0.00,'2019-05-20','2019-06-09',NULL);
-INSERT INTO `invoices` VALUES (9,'77-593-0081',5,172.17,0.00,'2019-07-09','2019-07-29',NULL);
-INSERT INTO `invoices` VALUES (10,'48-266-1517',1,159.50,0.00,'2019-06-30','2019-07-20',NULL);
-INSERT INTO `invoices` VALUES (11,'20-848-0181',3,126.15,0.03,'2019-01-07','2019-01-27','2019-01-11');
-INSERT INTO `invoices` VALUES (13,'41-666-1035',5,135.01,87.44,'2019-06-25','2019-07-15','2019-01-26');
-INSERT INTO `invoices` VALUES (15,'55-105-9605',3,167.29,80.31,'2019-11-25','2019-12-15','2019-01-15');
-INSERT INTO `invoices` VALUES (16,'10-451-8824',1,162.02,0.00,'2019-03-30','2019-04-19',NULL);
-INSERT INTO `invoices` VALUES (17,'33-615-4694',3,126.38,68.10,'2019-07-30','2019-08-19','2019-01-15');
-INSERT INTO `invoices` VALUES (18,'52-269-9803',5,180.17,42.77,'2019-05-23','2019-06-12','2019-01-08');
-INSERT INTO `invoices` VALUES (19,'83-559-4105',1,134.47,0.00,'2019-11-23','2019-12-13',NULL);
+CREATE TABLE branch (
+  branch_id INT PRIMARY KEY,
+  branch_name VARCHAR(40),
+  mgr_id INT,
+  mgr_start_date DATE,
+  FOREIGN KEY(mgr_id) REFERENCES employee(emp_id) ON DELETE SET NULL
+);
 
-CREATE TABLE `payments` (
-  `payment_id` int(11) NOT NULL AUTO_INCREMENT,
-  `client_id` int(11) NOT NULL,
-  `invoice_id` int(11) NOT NULL,
-  `date` date NOT NULL,
-  `amount` decimal(9,2) NOT NULL,
-  `payment_method` tinyint(4) NOT NULL,
-  PRIMARY KEY (`payment_id`),
-  KEY `fk_client_id_idx` (`client_id`),
-  KEY `fk_invoice_id_idx` (`invoice_id`),
-  KEY `fk_payment_payment_method_idx` (`payment_method`),
-  CONSTRAINT `fk_payment_client` FOREIGN KEY (`client_id`) REFERENCES `clients` (`client_id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_payment_invoice` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`invoice_id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_payment_payment_method` FOREIGN KEY (`payment_method`) REFERENCES `payment_methods` (`payment_method_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-INSERT INTO `payments` VALUES (1,5,2,'2019-02-12',8.18,1);
-INSERT INTO `payments` VALUES (2,1,6,'2019-01-03',74.55,1);
-INSERT INTO `payments` VALUES (3,3,11,'2019-01-11',0.03,1);
-INSERT INTO `payments` VALUES (4,5,13,'2019-01-26',87.44,1);
-INSERT INTO `payments` VALUES (5,3,15,'2019-01-15',80.31,1);
-INSERT INTO `payments` VALUES (6,3,17,'2019-01-15',68.10,1);
-INSERT INTO `payments` VALUES (7,5,18,'2019-01-08',32.77,1);
-INSERT INTO `payments` VALUES (8,5,18,'2019-01-08',10.00,2);
+ALTER TABLE employee
+ADD FOREIGN KEY(branch_id)
+REFERENCES branch(branch_id)
+ON DELETE SET NULL;
+
+ALTER TABLE employee
+ADD FOREIGN KEY(super_id)
+REFERENCES employee(emp_id)
+ON DELETE SET NULL;
+
+CREATE TABLE client (
+  client_id INT PRIMARY KEY,
+  client_name VARCHAR(40),
+  branch_id INT,
+  FOREIGN KEY(branch_id) REFERENCES branch(branch_id) ON DELETE SET NULL
+);
+
+CREATE TABLE works_with (
+  emp_id INT,
+  client_id INT,
+  total_sales INT,
+  PRIMARY KEY(emp_id, client_id),
+  FOREIGN KEY(emp_id) REFERENCES employee(emp_id) ON DELETE CASCADE,
+  FOREIGN KEY(client_id) REFERENCES client(client_id) ON DELETE CASCADE
+);
+
+CREATE TABLE branch_supplier (
+  branch_id INT,
+  supplier_name VARCHAR(40),
+  supply_type VARCHAR(40),
+  PRIMARY KEY(branch_id, supplier_name),
+  FOREIGN KEY(branch_id) REFERENCES branch(branch_id) ON DELETE CASCADE
+);
 
 
-DROP DATABASE IF EXISTS `sql_store`;
-CREATE DATABASE `sql_store`;
-USE `sql_store`;
+-- -----------------------------------------------------------------------------
 
-CREATE TABLE `products` (
-  `product_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `quantity_in_stock` int(11) NOT NULL,
-  `unit_price` decimal(4,2) NOT NULL,
-  PRIMARY KEY (`product_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-INSERT INTO `products` VALUES (1,'Foam Dinner Plate',70,1.21);
-INSERT INTO `products` VALUES (2,'Pork - Bacon,back Peameal',49,4.65);
-INSERT INTO `products` VALUES (3,'Lettuce - Romaine, Heart',38,3.35);
-INSERT INTO `products` VALUES (4,'Brocolinni - Gaylan, Chinese',90,4.53);
-INSERT INTO `products` VALUES (5,'Sauce - Ranch Dressing',94,1.63);
-INSERT INTO `products` VALUES (6,'Petit Baguette',14,2.39);
-INSERT INTO `products` VALUES (7,'Sweet Pea Sprouts',98,3.29);
-INSERT INTO `products` VALUES (8,'Island Oasis - Raspberry',26,0.74);
-INSERT INTO `products` VALUES (9,'Longan',67,2.26);
-INSERT INTO `products` VALUES (10,'Broom - Push',6,1.09);
+-- Corporate
+INSERT INTO employee VALUES(100, 'David', 'Wallace', '1967-11-17', 'M', 250000, NULL, NULL);
+
+INSERT INTO branch VALUES(1, 'Corporate', 100, '2006-02-09');
+
+UPDATE employee
+SET branch_id = 1
+WHERE emp_id = 100;
+
+INSERT INTO employee VALUES(101, 'Jan', 'Levinson', '1961-05-11', 'F', 110000, 100, 1);
+
+-- Scranton
+INSERT INTO employee VALUES(102, 'Michael', 'Scott', '1964-03-15', 'M', 75000, 100, NULL);
+
+INSERT INTO branch VALUES(2, 'Scranton', 102, '1992-04-06');
+
+UPDATE employee
+SET branch_id = 2
+WHERE emp_id = 102;
+
+INSERT INTO employee VALUES(103, 'Angela', 'Martin', '1971-06-25', 'F', 63000, 102, 2);
+INSERT INTO employee VALUES(104, 'Kelly', 'Kapoor', '1980-02-05', 'F', 55000, 102, 2);
+INSERT INTO employee VALUES(105, 'Stanley', 'Hudson', '1958-02-19', 'M', 69000, 102, 2);
+
+-- Stamford
+INSERT INTO employee VALUES(106, 'Josh', 'Porter', '1969-09-05', 'M', 78000, 100, NULL);
+
+INSERT INTO branch VALUES(3, 'Stamford', 106, '1998-02-13');
+
+UPDATE employee
+SET branch_id = 3
+WHERE emp_id = 106;
+
+INSERT INTO employee VALUES(107, 'Andy', 'Bernard', '1973-07-22', 'M', 65000, 106, 3);
+INSERT INTO employee VALUES(108, 'Jim', 'Halpert', '1978-10-01', 'M', 71000, 106, 3);
 
 
-CREATE TABLE `shippers` (
-  `shipper_id` smallint(6) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`shipper_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-INSERT INTO `shippers` VALUES (1,'Hettinger LLC');
-INSERT INTO `shippers` VALUES (2,'Schinner-Predovic');
-INSERT INTO `shippers` VALUES (3,'Satterfield LLC');
-INSERT INTO `shippers` VALUES (4,'Mraz, Renner and Nolan');
-INSERT INTO `shippers` VALUES (5,'Waters, Mayert and Prohaska');
+-- BRANCH SUPPLIER
+INSERT INTO branch_supplier VALUES(2, 'Hammer Mill', 'Paper');
+INSERT INTO branch_supplier VALUES(2, 'Uni-ball', 'Writing Utensils');
+INSERT INTO branch_supplier VALUES(3, 'Patriot Paper', 'Paper');
+INSERT INTO branch_supplier VALUES(2, 'J.T. Forms & Labels', 'Custom Forms');
+INSERT INTO branch_supplier VALUES(3, 'Uni-ball', 'Writing Utensils');
+INSERT INTO branch_supplier VALUES(3, 'Hammer Mill', 'Paper');
+INSERT INTO branch_supplier VALUES(3, 'Stamford Lables', 'Custom Forms');
 
+-- CLIENT
+INSERT INTO client VALUES(400, 'Dunmore Highschool', 2);
+INSERT INTO client VALUES(401, 'Lackawana Country', 2);
+INSERT INTO client VALUES(402, 'FedEx', 3);
+INSERT INTO client VALUES(403, 'John Daly Law, LLC', 3);
+INSERT INTO client VALUES(404, 'Scranton Whitepages', 2);
+INSERT INTO client VALUES(405, 'Times Newspaper', 3);
+INSERT INTO client VALUES(406, 'FedEx', 2);
 
-CREATE TABLE `customers` (
-  `customer_id` int(11) NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(50) NOT NULL,
-  `last_name` varchar(50) NOT NULL,
-  `birth_date` date DEFAULT NULL,
-  `phone` varchar(50) DEFAULT NULL,
-  `address` varchar(50) NOT NULL,
-  `city` varchar(50) NOT NULL,
-  `state` char(2) NOT NULL,
-  `points` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`customer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-INSERT INTO `customers` VALUES (1,'Babara','MacCaffrey','1986-03-28','781-932-9754','0 Sage Terrace','Waltham','MA',2273);
-INSERT INTO `customers` VALUES (2,'Ines','Brushfield','1986-04-13','804-427-9456','14187 Commercial Trail','Hampton','VA',947);
-INSERT INTO `customers` VALUES (3,'Freddi','Boagey','1985-02-07','719-724-7869','251 Springs Junction','Colorado Springs','CO',2967);
-INSERT INTO `customers` VALUES (4,'Ambur','Roseburgh','1974-04-14','407-231-8017','30 Arapahoe Terrace','Orlando','FL',457);
-INSERT INTO `customers` VALUES (5,'Clemmie','Betchley','1973-11-07',NULL,'5 Spohn Circle','Arlington','TX',3675);
-INSERT INTO `customers` VALUES (6,'Elka','Twiddell','1991-09-04','312-480-8498','7 Manley Drive','Chicago','IL',3073);
-INSERT INTO `customers` VALUES (7,'Ilene','Dowson','1964-08-30','615-641-4759','50 Lillian Crossing','Nashville','TN',1672);
-INSERT INTO `customers` VALUES (8,'Thacher','Naseby','1993-07-17','941-527-3977','538 Mosinee Center','Sarasota','FL',205);
-INSERT INTO `customers` VALUES (9,'Romola','Rumgay','1992-05-23','559-181-3744','3520 Ohio Trail','Visalia','CA',1486);
-INSERT INTO `customers` VALUES (10,'Levy','Mynett','1969-10-13','404-246-3370','68 Lawn Avenue','Atlanta','GA',796);
-
+-- WORKS_WITH
+INSERT INTO works_with VALUES(105, 400, 55000);
+INSERT INTO works_with VALUES(102, 401, 267000);
+INSERT INTO works_with VALUES(108, 402, 22500);
+INSERT INTO works_with VALUES(107, 403, 5000);
+INSERT INTO works_with VALUES(108, 403, 12000);
+INSERT INTO works_with VALUES(105, 404, 33000);
+INSERT INTO works_with VALUES(107, 405, 26000);
+INSERT INTO works_with VALUES(102, 406, 15000);
+INSERT INTO works_with VALUES(105, 406, 130000);
