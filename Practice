@@ -1,0 +1,124 @@
+###Questions related to the COMPANY database. 
+
+#1. Provide the complete info on all employees. (provide only the script)
+
+SELECT *
+FROM employee;
+
+#2. What is the count of all employees? 11
+
+SELECT COUNT (*) AS employee_count
+FROM employee;
+
+#3. What is the count of all departments? 3
+
+SELECT COUNT(*)
+FROM department;
+
+#4. Names of employees that work for Department # 4.
+
+SELECT first_name, last_name, dno
+FROM employee
+WHERE dno=4;
+
+#5. Name of projects in Sugarland
+
+SELECT project.name, project.location
+FROM project
+WHERE project_location = 'sugarland';
+
+#6. Employees name and hours information (provide only the script)
+
+SELECT first_name, last_name, SUM(hours)
+FROM works_on, employee
+WHERE employee.ssn=ssn
+GROUP BY first_name, last_name;
+
+
+#9.Who worked the most hours in Research dept?
+
+SELECT first_name, last_name, SUM(hours)
+FROM employee, works_on
+WHERE essn=ssn
+GROUP BY first_name, last_name
+ORDER BY SUM(hours)
+LIMIT 1;
+
+
+#10. Provide employees with A in First Name
+
+SELECT first_name, last_name
+FROM employees 
+WHERE first_name =  '%A%';
+
+#11. Provide employees with Last Name that does not begin with W
+
+SELECT first_name, last_name
+FROM employees 
+WHERE  NOT last_name   'W%';
+
+#12. Provide employees with ‘a’ as the second letter
+
+SELECT first_name, last_name
+FROM employees 
+WHERE first_name =  '_A%';
+
+#13. Name of employees who first name start with A and order last name alphabetically
+
+
+SELECT first_name, last_name
+FROM employees 
+WHERE first_name =  'A%'
+ORDER by last_name;
+
+
+#14. Name of employees in Department number 5 and salary ordered largest to smallest
+
+
+SELECT first_name, last_name, Dno, Salary
+FROM employees 
+WHERE dno =  5
+ORDER by salary DESC;
+
+#16. Sort employee birthdates from oldest to newest and then sort first names in alphabetical order
+
+SELECT birth_date, first_name
+FROM employee
+ORDER by birth_date DESC, first_name;
+
+#17. Sort employee salaries by largest to smallest and employee last names alphabetically
+
+SELECT first_name, last_name
+FROM employee
+ORDER BY salary DESC, last_name;
+
+#18. How many male and female employees are there?
+
+SELECT sex, COUNT (SEX) AS total
+FROM employee
+GROUP by sex;
+
+# 19. What departments pay over $50,000 to employees?
+SELECT dname, SUM(salary)
+FROM department
+INNE JOIN employee
+ON department.dnumber = employee.Dno
+GROUP BY dname
+HAVING SUM(salary) > 50000;
+
+#20. Get the name, birthdate, sex, and salary for each employee.
+
+SELECT name, birth_date, sex, salary
+FROM employee;
+
+#21. Modify query to get only employees born after 1960.
+SELECT name, birth_date, sex, salary
+FROM employee
+WHERE birth_date > 1960-01-01;
+
+
+#22. Modify query to group by sex for those born after 1960 (remove name and salary)
+SELECT  birth_date, sex
+FROM employee
+WHERE birth_date > 1960-01-01
+GROUP by sex;
