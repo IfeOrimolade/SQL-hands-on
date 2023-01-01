@@ -1,0 +1,82 @@
+** SQL statments only. Some statements explain what the SQL statement should produce **
+
+-- Find all employees ordered by salary
+SELECT *
+FROM employee
+ORDER BY SALARY DESC;
+
+-- Find all employees ordered by sex then name
+SELECT *
+FROM employee
+ORDER BY sex, first_name, last_name;
+
+-- Find the first 5 employees in the table
+SELECT *
+FROM employee
+LIMIT 5;
+
+
+-- Find the first and last name of all employees
+SELECT first_name, last_name
+FROM employee;
+
+-- Find the forename and surnames of all employees 
+SELECT first_name, last_name
+FROM employee;
+
+
+-- Find the forename and surnames of all employees 
+SELECT first_name AS forename, last_name AS surname
+FROM employee;
+
+***** DISTINCT Confirms different values stored in a particular column
+
+-- Find out all the different genders
+SELECT DISTINCT sex
+FROM employee;
+
+-- Find the average salary of all employee's salary
+SELECT AVG(salary)
+FROM employee;
+--> avg salary of all values
+
+-- Find the average salary of all employee's salary
+SELECT AVG(salary)
+FROM employee
+WHERE sex = 'M';
+--> Avg salary for males
+
+-- Find the sum of all employees salaries
+SELECT SUM(salary)
+FROM employee;
+
+
+-- Find out how many males and females there are
+SELECT COUNT(sex)
+FROM employee;
+--> counts number of employees
+
+-- Find any client's who are an LLC
+SELECT *
+FROM client
+WHERE client_name LIKE '%LLC';
+
+-- Find any clients who are schools
+SELECT *
+FROM client
+WHERE client_name LIKE '%school%';
+
+SELECT branch_name, first_name, branch_name
+FROM employee
+JOIN branch
+ON employee.emp_id = branch.mgr_id;
+
+-- Find names of all employees who have
+-- sold over 30,000 to a single client
+SELECT employee.first_name, employee.last_name
+FROM employee
+WHERE employee.emp_id IN (
+SELECT works_with.emp_id
+FROM works_with
+WHERE works_with.total_sales > 30000
+);
