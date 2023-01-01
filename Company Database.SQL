@@ -47,9 +47,9 @@ CREATE TABLE `employee` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 # TABLE: `COMPANY`.`project`
 CREATE TABLE `project` (
-  `pname` varchar(15) NOT NULL,
+  `project.name` varchar(15) NOT NULL,
   `pnumber` int(11) NOT NULL,
-  `plocation` varchar(15) DEFAULT NULL,
+  `project.location` varchar(15) DEFAULT NULL,
   `dnum` int(11) NOT NULL,
   PRIMARY KEY (`pnumber`),
   UNIQUE KEY `pname` (`pname`),
