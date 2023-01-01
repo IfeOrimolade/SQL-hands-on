@@ -33,9 +33,9 @@ CREATE TABLE `dept_locations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 # TABLE: `COMPANY`.`employee`
 CREATE TABLE `employee` (
-  `Firstname` varchar(15) NOT NULL,
+  `Fname` varchar(15) NOT NULL,
   `Minit` char(1) DEFAULT NULL,
-  `Lastname` varchar(15) NOT NULL,
+  `Lname` varchar(15) NOT NULL,
   `SSN` char(9) NOT NULL,
   `bdate` date DEFAULT NULL,
   `Address` varchar(30) DEFAULT NULL,
